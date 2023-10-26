@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+        "orangex4.latex-sympy-calculator",
+        "orangex4.vscode-typst-sympy-calculator",
+        "mality.latex-sympy-calculator-225",
+        "ms-python.vscode-pylance"
+    ]
+}
