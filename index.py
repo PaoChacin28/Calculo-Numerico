@@ -4,7 +4,7 @@ from sympy import simplify
 
 print("")
 x = symbols('x') 
-fn = simplify(input("Ingrese la funcion1: "))
+fn = simplify(input("Ingrese la funcion: "))
 f = lambdify(x, fn)
 
 a = float(input("Valor inicial de a: "))
