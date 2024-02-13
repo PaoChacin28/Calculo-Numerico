@@ -1,9 +1,7 @@
 from sympy import symbols, sympify, diff
 
 def newton_raphson_convergencia(f_sym, x0, tol, max_iter):
-    """
-    Método de Newton-Raphson con impresiones detalladas de cada iteración.
-    """
+
     x = symbols('x')
     df_sym = diff(f_sym, x)  # Derivada de la función
     ddf_sym = diff(df_sym, x)  # Segunda derivada de la función
