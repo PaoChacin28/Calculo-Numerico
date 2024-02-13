@@ -32,11 +32,11 @@ if f(a)*f(b)<0:
         
         x_ant = xr
         
-        print("{:^10} {:^10f} {:^10f} {:^10f} {:^10}".format(i, a, b, xr, round(error * 100, 9)))
+        print("{:^10} {:^10f} {:^10f} {:^10f} {:^10}".format(i, a, b, xr, round(error , 9)))
         i = i+1
         
     print("")
-    print("el valor de x es ", round(xr, 9), "con un error de ", round(error *100, 9), "%")
+    print("el valor de x es ", round(xr, 9), "con un error de ", round(error , 9))
     
 else: 
     
