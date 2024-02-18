@@ -1,6 +1,6 @@
 import math
 
-def biseccion(f, a, b, tol=0.01):
+def biseccion(f, a, b, tol):
     """
     Encuentra la raíz de la función f en el intervalo [a, b] usando el método de bisección
     y continúa hasta que la condición de parada basada en la tolerancia se cumpla.
@@ -16,7 +16,7 @@ def biseccion(f, a, b, tol=0.01):
     - Error estimado en cada iteración después de la primera.
 
     Retorna:
-    - La aproximación de la raíz.
+    - La aproximación de la raíz y el error.
     """
     if f(a) * f(b) >= 0:
         print("El método de bisección falla debido a que f(a) * f(b) no es menor que 0.")
@@ -31,7 +31,7 @@ def biseccion(f, a, b, tol=0.01):
         iteracion += 1
         if iteracion > 1:
             error = abs((c - c_previo)/c)
-            print(f"Iteración {iteracion}: valor actual = {c}, error = {error}")
+            print(f"Iteración {iteracion}: valor actual = {c}, error = {error:.8f}")
         else:
             print(f"Iteración {iteracion}: valor actual = {c}")
         if f(c) == 0 or error < tol:
@@ -40,13 +40,5 @@ def biseccion(f, a, b, tol=0.01):
             b = c
         else:
             a = c
-    print(f"Raíz encontrada: {c} en {iteracion} iteraciones con un error final de {error}")
-    return c
-
-# Función de prueba
-def test_func(x):
-    return math.log(x)+x**2-4
-
-# Test del algoritmo de bisección
-if __name__ == "__main__":
-    root = biseccion(test_func, 1, 2, 0.01)
+    print(f"Raíz encontrada: {c} en {iteracion} iteraciones con un error final de {error:.8f}")
+    return c, error

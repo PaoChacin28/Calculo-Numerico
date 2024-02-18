@@ -40,13 +40,3 @@ def newton_raphson_sympy(func, x0, tol, max_iter=100):
     
     print("Máximo de iteraciones alcanzado. Puede que no se haya encontrado la convergencia.")
     return xn
-
-# Test del algoritmo con una función específica
-if __name__ == "__main__":
-    x = sp.symbols('x')
-    func = sp.log(x) + x**2 - 4  # Función correcta
-    x0 = 1.5  # Aproximación inicial
-
-    print(f"Buscando la solucion de la función = {func} ...")
-    root = newton_raphson_sympy(func, x0, 0.01)
-    print(f"Raíz encontrada: {root}")
