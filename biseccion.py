@@ -1,47 +1,46 @@
-from sympy import symbols 
-from sympy import lambdify
-from sympy import simplify
+import math
 
-print("")
-x = symbols('x') 
-fn = simplify(input("Ingrese la funcion: "))
-f = lambdify(x, fn)
+def biseccion(f, a, b, tol):
+    """
+    Encuentra la raíz de la función f en el intervalo [a, b] usando el método de bisección
+    y continúa hasta que la condición de parada basada en la tolerancia se cumpla.
 
-a = float(input("Valor inicial de a: "))
-b = float(input("Valor inicial de b: "))
-crit = float(input("criterio de parada "))
-i = 0
-error = 1
-x_ant = 0
+    Parámetros:
+    - f: función para la cual se busca la raíz.
+    - a: límite inferior del intervalo.
+    - b: límite superior del intervalo.
+    - tol: tolerancia, criterio de parada basado en la precisión deseada, expresada en decimales.
 
-if f(a)*f(b)<0:
+    Imprime:
+    - Número de iteraciones.
+    - Error estimado en cada iteración después de la primera.
+
+    Retorna:
+    - La aproximación de la raíz y el error.
+    """
+    if f(a) * f(b) >= 0:
+        print("El método de bisección falla debido a que f(a) * f(b) no es menor que 0.")
+        return None
     
-    
-    print("")
-    print("{:^60}".format("METODO DE BISECCION"))
-    print("{:^10} {:^10} {:^10} {:^10}".format("i", "a", "b", "xr", "error(%)"))
-    
-    while error > crit:
-        xr = (a+b)/2
-        error = abs((xr-x_ant)/xr)
-        
-        if f(xr)*f(a)<0:
-            b = xr
+    iteracion = 0
+    c = a
+    error = float('inf')  # Inicializa el error a infinito
+    while (b - a) / 2 > tol:
+        c_previo = c
+        c = (a + b) / 2
+        iteracion += 1
+        if iteracion > 1:
+            error = abs((c - c_previo)/c)
+            print(f"Iteración {iteracion}: valor actual = {c}, error = {error:.8f}")
         else:
-            a = xr
-        
-        x_ant = xr
-        
-        print("{:^10} {:^10f} {:^10f} {:^10f} {:^10}".format(i, a, b, xr, round(error , 9)))
-        i = i+1
-        
+            print("BISECCION")
+            print(f"Iteración {iteracion}: valor actual = {c}")
+        if f(c) == 0 or error < tol:
+            break
+        if f(c) * f(a) < 0:
+            b = c
+        else:
+            a = c
+    print(f"Raíz encontrada: {c} en {iteracion} iteraciones con un error final de {error:.8f}")
     print("")
-    print("el valor de x es ", round(xr, 9), "con un error de ", round(error , 9))
-    
-else: 
-    
-    print("")
-    print("la funcion no tiene una raiz en el intervalo de " + "x =" + str(a) + "a x = " + str(b))
-    print("Ingresar otros valores iniciales")
-    
-        
+    return c, error

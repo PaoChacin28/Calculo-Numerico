@@ -20,6 +20,7 @@ def integracion_riemann(func_sympy, a, b, n):
     error_riemann = abs((valor_real - resultado) / valor_real)
     print(f"Valor real de la integral: {valor_real:.6f}")
     print(f"Riemann: Aproximación = {resultado:.6f}, Error relativo = {error_riemann:.6f}")
+    print("")
     return resultado, error_riemann
 
 def integracion_trapecio(func_sympy, a, b, n):
@@ -36,5 +37,6 @@ def integracion_trapecio(func_sympy, a, b, n):
     error_trapecio = abs((valor_real - resultado) / valor_real)
     print(f"Valor real de la integral: {valor_real:.6f}")
     print(f"Trapecio: Aproximación = {resultado:.6f}, Error relativo = {error_trapecio:.6f}")
+    print("")
     return resultado, error_trapecio
 

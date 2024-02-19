@@ -1,59 +1,46 @@
-from sympy import symbols, sympify, diff
+import sympy as sp
 
-def newton_raphson_convergencia(f_sym, x0, tol, max_iter):
+def newton_raphson_sympy(func, x0, tol, max_iter=100):
+    """
+    Encuentra la raíz de una función usando el método de Newton-Raphson.
 
-    x = symbols('x')
-    df_sym = diff(f_sym, x)  # Derivada de la función
-    ddf_sym = diff(df_sym, x)  # Segunda derivada de la función
-    
-    f = lambda x_val: f_sym.subs(x, x_val).evalf()
-    df = lambda x_val: df_sym.subs(x, x_val).evalf()
-    ddf = lambda x_val: ddf_sym.subs(x, x_val).evalf()
-    
-    # Calcular el criterio de convergencia
-    criterio = (f(x0) * ddf(x0)) / (df(x0) ** 2)
-    print("")
-    if criterio >= 1:
-        print("El criterio de convergencia sugiere que el método puede no converger.")
-        return None
-    else:
-        print("El criterio de convergencia sugiere que el método debería converger.")
-    
-    print("")
-    print("{:^60}".format("MÉTODO DE NEWTON-RAPHSON"))
-    print("{:^10} {:^20} {:^20}".format("Iteración", "Aproximación", "Error"))
-    
+    Parámetros:
+    - func: La función para la cual se busca la raíz, dada como una expresión de sympy.
+    - x0: Aproximación inicial a la raíz.
+    - tol: Tolerancia para el criterio de parada basado en el error relativo.
+    - max_iter: Número máximo de iteraciones.
+
+    Retorna:
+    - La aproximación a la raíz de la función si se encuentra dentro de las iteraciones dadas.
+    """
+    x = sp.symbols('x')  # Define el símbolo x para derivar y evaluar la función
+    f = func
+    f_deriv = sp.diff(f, x)  # Deriva la función automáticamente
+
+    f_lamb = sp.lambdify(x, f, 'numpy')  # Prepara la función para evaluación numérica
+    f_deriv_lamb = sp.lambdify(x, f_deriv, 'numpy')  # Prepara la derivada para evaluación numérica
+
     xn = x0
-    error = tol + 1  # Asegurar que el bucle comience
-    i = 1  # Contador de iteraciones
-    
-    while error > tol and i <= max_iter:
-        fxn = f(xn)
-        dfxn = df(xn)
-        if dfxn == 0:
-            print("Derivada nula en la iteración. El método no puede continuar.")
+    for n in range(max_iter):
+        fxn = f_lamb(xn)
+        dfxn = f_deriv_lamb(xn)
+        if abs(dfxn) < tol:
+            print("Derivada muy cercana a cero. El método podría no converger.")
+            print("")
             return None
-        xn1 = xn - fxn/dfxn  # Nueva aproximación
-        error = abs(xn1 - xn)
-        print("{:^10} {:^20.10f} {:^20.10f}".format(i, xn1, error))
-        
-        xn = xn1
-        i += 1
+        xn_next = xn - fxn / dfxn
+        if n > 0:  # Calcula el error relativo desde la segunda iteración
+            error = abs(xn_next - xn) / abs(xn_next)
+            
+            print(f"Iteración {n}: x = {xn_next:.8f}, error = {error:.8f}")
+            if error < tol:
+                print(f"Convergencia alcanzada en iteración {n}.")
+                print("")
+                return xn_next
+        else:
+            print("NEWTON RAPHSON")
+            print(f"Iteración {n}: x = {xn_next:.8f}")  # Primera iteración sin comparar error
+        xn = xn_next
     
-    if error <= tol:
-        print("")
-        print(f"Solución encontrada: x = {xn1:.10f} con un error de {error:.10f} después de {i-1} iteraciones.")
-    else:
-        print("Se alcanzó el máximo de iteraciones sin converger a la solución deseada.")
-
-# Solicitar entrada del usuario
-funcion_usuario = input("Ingresa tu función en términos de x: ")
-x0 = float(input("Ingresa el valor inicial x0: "))
-tol = float(input("Ingresa el margen de error (tolerancia), usa punto para decimales: "))
-max_iter = int(input("Ingresa el número máximo de iteraciones: "))
-
-# Convertir la entrada a una expresión sympy
-f_sym = sympify(funcion_usuario)
-
-# Llamar al método de Newton-Raphson con impresiones detalladas
-newton_raphson_convergencia(f_sym, x0, tol, max_iter)
+    print("Máximo de iteraciones alcanzado. Puede que no se haya encontrado la convergencia.")
+    return xn
